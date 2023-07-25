@@ -31,9 +31,9 @@
       }
    },
 
-   "postCreateCommand": "pip install PyGithub requests",
-
    "build": {
       "dockerfile": "Dockerfile"
-   }
+   },
+
+   "postCreateCommand": "pip install PyGithub requests GitPython"
 }
