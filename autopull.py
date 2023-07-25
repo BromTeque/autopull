@@ -3,6 +3,7 @@
 # Automatic git clone and pull for git repositories, to be deployed with cron.
 # Make sure that the process that runs the python scrip has read and write permission to the appropriate directories.
 
+
 import os
 import git
 import time
@@ -10,23 +11,25 @@ import github
 import logging
 
 
+# Global Variables
+USERNAME = "BromTeque"
+
+
 def main():
    logging.basicConfig(
       filename = "autopull.log",
       format = "%(asctime)s %(levelname)-8s %(message)s",
       datefmt = "%Y-%m-%d %H:%M:%S",
-      level = logging.ERROR
+      level = logging.INFO
    )
-   workDir = "."
-   username = "BromTeque"
-   user = github.Github().get_user(username)
+   user = github.Github().get_user(USERNAME)
 
    class Progress(git.remote.RemoteProgress):
       def update(self, op_code, cur_count, max_count = None, message = ""):
          logging.debug(self._cur_line)
    
    for starred in user.get_starred():
-      logging.debug(f"Repo URL: {starred.clone_url}")
+      logging.info(f"Updating Repo: {starred.full_name}")
       try:
          repo = git.Repo(starred.name)
          origin = repo.remotes.origin
