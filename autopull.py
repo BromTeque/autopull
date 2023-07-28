@@ -33,6 +33,9 @@ def main(username=None, debug=False):
 
     # Check username variable
     if username is None:
+        print('Username argument is required.')
+        print('Usage: ./autopull -u <GitHub username>')
+        print('You can also use --username instead of -u.')
         logger.error("No username was provided. Exiting...")
         sys.exit(1)
 
@@ -83,14 +86,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="autopull")
     parser.add_argument(
-        "-d", "--debug",
-        action="store_true",
-        help="Enable debug mode"
-    )
-    parser.add_argument(
         "-u", "--username",
         type=str,
         help="Specify a username"
+    )
+    parser.add_argument(
+        "-d", "--debug",
+        action="store_true",
+        help="Enable debug mode"
     )
     parser.add_argument(
         "--version",
