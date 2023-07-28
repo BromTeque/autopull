@@ -17,8 +17,9 @@ then
 
 ```./autopull -du <GitHub username>```
 
-
 ## General options:
+    --version,                          Prints version number
+## Required options:
     -u, --username <GitHub Username>    GitHub username to get repositories from
 ## Optional options:
     -d, --debug                         Changes logging to debug mode

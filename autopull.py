@@ -1,4 +1,4 @@
-# Autopull v1.0
+# Autopull
 # Made by BromTeque
 
 
@@ -8,6 +8,9 @@ import logging.handlers
 import argparse
 import github
 import git
+
+
+VERSION = "1.0.0"
 
 
 def main(username=None, debug=False):
@@ -88,6 +91,11 @@ if __name__ == "__main__":
         "-u", "--username",
         type=str,
         help="Specify a username"
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {VERSION}"
     )
     args = parser.parse_args()
 
