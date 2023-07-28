@@ -1,64 +1,67 @@
 # Autopull v1.0
 # Made by BromTeque
-# Automatic git clone and pull for git repositories, to be deployed with cron.
-# Make sure that the process that runs the python scrip has read and write permission to the appropriate directories.
 
 
 import sys
-import git
-import github
 import logging
 import argparse
+import github
+import git
 
-def main(username = None, debug = False):
 
-   logging.basicConfig(
-      filename = "autopull.log",
-      format = "%(asctime)s %(levelname)-8s %(message)s",
-      datefmt = "%Y-%m-%d %H:%M:%S",
-      level = logging.DEBUG if debug else logging.INFO
-   )
+def main(username=None, debug=False):
+    """Main function"""
 
-   if username is None:
-      logging.error("No username was provided. Exiting...")
-      sys.exit(1)
+    logging.basicConfig(
+        filename="autopull.log",
+        format="%(asctime)s %(levelname)-8s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        level=logging.DEBUG if debug else logging.INFO
+    )
 
-   user = github.Github().get_user(username)
+    if username is None:
+        logging.error("No username was provided. Exiting...")
+        sys.exit(1)
 
-   class Progress(git.remote.RemoteProgress):
-      def update(self, op_code, cur_count, max_count = None, message = ""):
-         if debug:
+    user = github.Github().get_user(username)
+
+    class Progress(git.remote.RemoteProgress):
+        """Print progress"""
+
+        def update(self, op_code, cur_count, max_count=None, message=""):
             logging.debug(self._cur_line)
-   
-   for starred in user.get_starred():
-      logging.info(f"Updating Repo: {starred.full_name}")
-      try:
-         repo = git.Repo(starred.name)
-         repo.remotes.origin
-         try:
-            logging.debug(f"Fetching repo: {starred.name}")
-            for remote in repo.remotes:
-               remote.fetch(progress = Progress())
-            logging.debug(f"Merging(/Pulling) repo: {starred.name}")
-            repo.git.merge(f"origin/{repo.active_branch.name}")
-         except git.GitCommandError as error:
-            logging.error(f"Git Command error while fetching: {error}")
-      except git.exc.NoSuchPathError:
-         try:
-            logging.debug(f"Cloning repo: {starred.name}")
-            git.Repo.clone_from(starred.clone_url, starred.name, progress = Progress())
-         except git.GitCommandError as error:
-            logging.error(f"Git Command error while cloning: {error}")
 
-   logging.debug("End of Script")
+    for starred in user.get_starred():
+        logging.info("Updating Repo: %s", starred.full_name)
+        try:
+            repo = git.Repo(starred.name)
+            try:
+                logging.debug("Fetching repo: %s", starred.name)
+                for remote in repo.remotes:
+                    remote.fetch(progress=Progress())
+                logging.debug("Merging(/Pulling) repo: %s", starred.name)
+                repo.git.merge("origin/{repo.active_branch.name}")
+            except git.GitCommandError as error:
+                logging.error("Git Command error while fetching: %s", error)
+        except git.exc.NoSuchPathError:
+            try:
+                logging.debug("Cloning repo: %s", starred.name)
+                git.Repo.clone_from(starred.clone_url,
+                                    starred.name, progress=Progress())
+            except git.GitCommandError as error:
+                logging.error("Git Command error while cloning: %s", error)
+
+    logging.debug("End of Script")
 
 
 if __name__ == "__main__":
 
-   parser = argparse.ArgumentParser(description = "autopull")
-   parser.add_argument("-d", "--debug", action = "store_true", help = "Enable debug mode")
-   parser.add_argument("-u", "--username", type = str, help = "Specify a username")
+    parser = argparse.ArgumentParser(description="autopull")
+    parser.add_argument("-d", "--debug", action="store_true",
+                        help="Enable debug mode")
+    parser.add_argument("-u", "--username", type=str,
+                        help="Specify a username")
 
-   args = parser.parse_args()
+    args = parser.parse_args()
 
-   main(debug = args.debug)
+    main(debug=args.debug)

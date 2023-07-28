@@ -1,3 +1,10 @@
 {
-   "python.pythonPath": "/usr/local/bin/python"
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8",
+        "editor.formatOnSave": true
+    },
+
+    "python.formatting.provider": "none",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
 }
