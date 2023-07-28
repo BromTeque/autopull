@@ -67,6 +67,8 @@ def main(username=None, debug=False):
                 )
             except git.GitCommandError as error:
                 logger.error("Git Command error while cloning: %s", error)
+        except git.GitCommandError as error:
+            logger.error("Git command error while fetching: %s", error)
 
     logger.debug("End of Script")
 
