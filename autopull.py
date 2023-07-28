@@ -52,7 +52,10 @@ def main(username=None, debug=False):
                 for remote in repo.remotes:
                     remote.fetch(progress=Progress())
                 logger.debug("Merging(/Pulling) repo: %s", starred.name)
-                repo.git.merge(f"origin/{repo.active_branch.name}")
+                repo.git.merge(
+                    f"origin/{repo.active_branch.name}",
+                    progress=Progress()
+                )
             except git.GitCommandError as error:
                 logger.error("Git Command error while fetching: %s", error)
             except git.exc.BadName as error:
