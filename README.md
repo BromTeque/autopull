@@ -3,7 +3,7 @@ A script by BromTeque
 
 # USAGE AND OPTIONS
 
-Download the autpull release binary.
+Download the autopull release binary.
 
 First run
 
