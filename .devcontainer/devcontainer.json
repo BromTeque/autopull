@@ -36,5 +36,5 @@
       "dockerfile": "Dockerfile"
    },
 
-   "postCreateCommand": "pip install -U PyGithub requests GitPython pyinstaller"
+   "postCreateCommand": "pip install -U PyGithub requests GitPython pyinstaller autopep8"
 }
