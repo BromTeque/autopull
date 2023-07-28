@@ -40,14 +40,19 @@ def main(username=None, debug=False):
                 for remote in repo.remotes:
                     remote.fetch(progress=Progress())
                 logging.debug("Merging(/Pulling) repo: %s", starred.name)
-                repo.git.merge("origin/{repo.active_branch.name}")
+                repo.git.merge(f"origin/{repo.active_branch.name}")
             except git.GitCommandError as error:
                 logging.error("Git Command error while fetching: %s", error)
+            except git.exc.BadName as error:
+                logging.error("Invalid branch name while merging: %s", error)
         except git.exc.NoSuchPathError:
             try:
                 logging.debug("Cloning repo: %s", starred.name)
-                git.Repo.clone_from(starred.clone_url,
-                                    starred.name, progress=Progress())
+                git.Repo.clone_from(
+                    starred.clone_url,
+                    starred.name,
+                    progress=Progress()
+                )
             except git.GitCommandError as error:
                 logging.error("Git Command error while cloning: %s", error)
 
@@ -57,11 +62,16 @@ def main(username=None, debug=False):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="autopull")
-    parser.add_argument("-d", "--debug", action="store_true",
-                        help="Enable debug mode")
-    parser.add_argument("-u", "--username", type=str,
-                        help="Specify a username")
-
+    parser.add_argument(
+        "-d", "--debug",
+        action="store_true",
+        help="Enable debug mode"
+    )
+    parser.add_argument(
+        "-u", "--username",
+        type=str,
+        help="Specify a username"
+    )
     args = parser.parse_args()
 
-    main(debug=args.debug)
+    main(args.username, debug=args.debug)
