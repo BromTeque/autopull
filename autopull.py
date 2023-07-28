@@ -1,27 +1,29 @@
-# Autopull v1.1
+# Autopull v1.0
 # Made by BromTeque
 # Automatic git clone and pull for git repositories, to be deployed with cron.
 # Make sure that the process that runs the python scrip has read and write permission to the appropriate directories.
 
 
+import sys
 import git
 import github
 import logging
 import argparse
 
+def main(username = None, debug = False):
 
-# Global Variables
-USERNAME = "BromTeque"
-
-
-def main(debug = False):
    logging.basicConfig(
       filename = "autopull.log",
       format = "%(asctime)s %(levelname)-8s %(message)s",
       datefmt = "%Y-%m-%d %H:%M:%S",
       level = logging.DEBUG if debug else logging.INFO
    )
-   user = github.Github().get_user(USERNAME)
+
+   if username is None:
+      logging.error("No username was provided. Exiting...")
+      sys.exit(1)
+
+   user = github.Github().get_user(username)
 
    class Progress(git.remote.RemoteProgress):
       def update(self, op_code, cur_count, max_count = None, message = ""):
@@ -48,10 +50,14 @@ def main(debug = False):
          except git.GitCommandError as error:
             logging.error(f"Git Command error while cloning: {error}")
 
+   logging.debug("End of Script")
+
 
 if __name__ == "__main__":
+
    parser = argparse.ArgumentParser(description = "autopull")
    parser.add_argument("-d", "--debug", action = "store_true", help = "Enable debug mode")
+   parser.add_argument("-u", "--username", type = str, help = "Specify a username")
 
    args = parser.parse_args()
 
