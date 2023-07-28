@@ -88,7 +88,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-u", "--username",
         type=str,
-        help="Specify a username"
+        help="Specify a GitHub USERNAME"
     )
     parser.add_argument(
         "-d", "--debug",
