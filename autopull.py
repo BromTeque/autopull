@@ -2,7 +2,9 @@
 # Made by BromTeque
 
 
+"""Module exit used to cancel script on error"""
 import sys
+
 import logging
 import logging.handlers
 import argparse
@@ -10,7 +12,7 @@ import github
 import git
 
 
-VERSION = "1.0.0"
+VERSION = "0.0.1"
 
 
 def main(username=None, debug=False):
