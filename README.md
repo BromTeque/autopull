@@ -1,3 +1,8 @@
+# DEPRECATED
+
+This repo is deprecated in favor of Gitea's built-in mirror function.
+
+
 # AUTOPULL
 A script by BromTeque
 
